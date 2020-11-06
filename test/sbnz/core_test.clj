@@ -1,0 +1,7 @@
+(ns sbnz.core-test
+  (:require [clojure.test :refer :all]
+            [sbnz.core :refer :all]))
+
+(deftest a-test
+  (testing "FIXME, I fail."
+    (is (= 0 1))))
