@@ -3,7 +3,8 @@
   (:require [clojure.edn :as edn])
   (:gen-class))
 
-(defonce memory (atom (make-array Integer/TYPE (* 1024 1024))))
+(defonce mem-size 1024)
+(defonce memory (atom (make-array Integer/TYPE mem-size)))
 (defonce pc (atom 0))
 
 (defn mem-read [addr]
@@ -20,14 +21,19 @@
   (spit filename (s/join " " (take cells @memory))))
 
 (defn branch [addr]
-  (swap! pc addr))
+  (reset! pc addr))
 
 (defn next-instruction []
   (swap! pc + 4))
 
 (defn run []
   (let [[a b c d] (for [i (range 4)] (mem-read (+ @pc i)))
-        result (- (read a) (mem-read b))]
+        result (- (mem-read b) (mem-read a))]
     (mem-write c result)
     (if (zero? result) (branch d) (next-instruction))
-    (when (>= @pc 0) (recur))))
+    (when (and (< @pc mem-size) (>= @pc 0))
+      (recur))))
+
+(defn start []
+  (reset! pc 0)
+  (run))
