@@ -11,7 +11,12 @@
   (aget @memory addr))
 
 (defn mem-write [addr value]
-  (aset @memory addr value))
+  (aset-int @memory addr value))
+
+(defn mem-set [cells]
+  (reset! memory (make-array Integer/TYPE mem-size))
+  (doseq [i (range (count cells))]
+    (mem-write i (nth cells i))))
 
 (defn mem-load [filename]
   (->> (map edn/read-string (s/split (slurp filename) #" "))

@@ -1,0 +1,8 @@
+<program> = sbnz (<newline> sbnz)* <newline>?
+sbnz = <'SBNZ'> <ws> term <ws> term <ws> term <ws> term
+<ws> = (' ' | '\t' )+
+<newline> = ('\r'? '\n')+
+<term> = (num | mem | var)
+mem = #"[0-9]+"
+num = <'['> <ws>? #'-?[0-9]+' <ws>? <']'>
+var = #'[a-zA-Z]+'
