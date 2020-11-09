@@ -37,14 +37,17 @@ The memory space for the VM is 0-1023. Using a jump address less than 0 or great
 The SBNZ instructions are composed of 4 memory references which can be of the following types
 
 Reference type | Description
-<number> | A direct memory cell reference (0, 4, 1024, etc.)
-<variable name> | A reference to a memory cell whose address will be computed (a, b, c, foo, bar, etc.)
-[<number>] | An integer that will be stored in a memory cell whose address will be computed, ([0], [1], [7], etc.)
+---------------|------------
+\<number\> | A direct memory cell reference (`0`, `4`, `1024`, etc.)
+\<variable name\> | A reference to a memory cell whose address will be computed (`a`, `b`, `c`, `foo`, `bar`, etc.)
+\[\<number\>\] | An integer that will be stored in a memory cell whose address will be computed, (`[0]`, `[1]`, `[7]`, etc.)
 
 The OUTPUT directive takes one argument that can be one of the following types
 
-    <number>: A direct memory cell reference
-    <variable name>: A reference to a memory cell whose address will be computed
+Reference type | Description
+---------------|------------
+\<number\> | A direct memory cell reference
+\<variable name\> | A reference to a memory cell whose address will be computed
 
 ## License
 
