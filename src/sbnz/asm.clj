@@ -1,10 +1,13 @@
 (ns sbnz.asm
   (:require [instaparse.core :as insta])
+  (:require [instaparse.failure :as fail])
   (:require [clojure.java.io :refer [resource]])
   (:require [clojure.edn :as edn])
+  (:require [clojure.string :as s])
   (:gen-class))
 
 (defonce data-offset (atom 0))
+(defonce data-mapping (atom {}))
 
 (defn map-cell [mapping literal]
   (if (mapping literal) mapping
@@ -46,12 +49,29 @@
   (let [mapping (map-cells {} program :num)
         mapping (map-cells mapping program :var)
         memory (reduce (fn [mem instr] (gen-code-instr mem mapping instr)) [] program)]
+    (reset! data-mapping mapping)
     (add-nums-and-vars memory mapping)))
 
+(defn gen-output [outputs]
+  (for [[_ output] outputs] 
+    (if (= (first output) :var)
+      (get @data-mapping output)
+      (edn/read-string (second output)))))
+
 (defn parse-sbnz [src]
-  (let [parser (insta/parser (resource "sbnz.ip"))
-        program (parser src)]
-    program))
+  (try
+    (let [parser (insta/parser (resource "sbnz.ip"))
+          program (parser src)]
+      program)
+    (catch Exception _)))
+
+(defn get-code-subset [program type]
+  (filter #(= (first %) type) program))
 
 (defn load-program [filename]
-  (gen-code (parse-sbnz (slurp filename))))
+  (if-let [parsed (parse-sbnz (slurp filename))]
+    (if (not (insta/failure? parsed))
+      [(gen-code (get-code-subset parsed :sbnz))
+       (gen-output (get-code-subset parsed :output))]
+      (fail/pprint-failure parsed))
+    nil))

@@ -1,5 +1,6 @@
-<program> = sbnz (<newline> sbnz)* <newline>?
+<program> = sbnz (<newline> sbnz)* (<newline> output)* <newline>?
 sbnz = <'SBNZ'> <ws> term <ws> term <ws> term <ws> term
+output = <'OUTPUT'> <ws> (mem | var)
 <ws> = (' ' | '\t' )+
 <newline> = ('\r'? '\n')+
 <term> = (num | mem | var)
