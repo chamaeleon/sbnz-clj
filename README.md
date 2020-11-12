@@ -1,6 +1,6 @@
 # sbnz
 
-A simple SBNZ (Subtract, Branch If Not Zero) VM Interpreter.
+A simple SBNZ (Subtract, Branch If Not Zero) VM Interpreter implemented in Clojure.
 
 ## Usage
 
